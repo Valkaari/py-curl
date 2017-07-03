@@ -1,0 +1,11 @@
+STRINGTABLE Opycurl
+{
+		Opycurl  		"Py Curl";
+		SPEED			"Speed";
+		FREQUENCY		"Frequency";
+		NOISE_OFFSET	"Noise Offset";
+		POS_OFFSET		"Position Offset";
+		NOISESCALE		"Noise Scale";
+		DISP			"Displacement";
+
+}
