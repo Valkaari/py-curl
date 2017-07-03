@@ -10,4 +10,4 @@ Deformer for basic particle inside cinema4d.
 Work in progress.
 
 
-![Alt text](/wip.png.jpg?raw=true "Work in Progress")
+![Alt text](/wip.png?raw=true "Work in Progress")
