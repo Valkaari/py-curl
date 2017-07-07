@@ -84,9 +84,9 @@ class CurlSmoke(plugins.ObjectData):
         #nzpos = self.get_noise_val(x,y,zpos,2)
         #nzneg = self.get_noise_val(x,y,zneg,2)
               
-        offset.x = ((self.get_noise_val(x,ypos,z,2) - self.get_noise_val(x,yneg,z,2)) - (self.get_noise_val(x,y,zpos,1) - self.get_noise_val(x,y,zneg,1))) 
-        offset.y = ((self.get_noise_val(x,y,zpos,0) - self.get_noise_val(x,y,zneg,0)) - (self.get_noise_val(xpos,y,z,2) - self.get_noise_val(xneg,y,z,2))) 
-        offset.z = ((self.get_noise_val(xpos,y,z,1) - self.get_noise_val(xneg,y,z,1)) - (self.get_noise_val(x,ypos,z,0) - self.get_noise_val(x,yneg,z,0))) 
+        offset.x = self.get_noise_val(x,ypos,z,2) - self.get_noise_val(x,yneg,z,2) - self.get_noise_val(x,y,zpos,1) + self.get_noise_val(x,y,zneg,1) 
+        offset.y = self.get_noise_val(x,y,zpos,0) - self.get_noise_val(x,y,zneg,0) - self.get_noise_val(xpos,y,z,2) + self.get_noise_val(xneg,y,z,2) 
+        offset.z = self.get_noise_val(xpos,y,z,1) - self.get_noise_val(xneg,y,z,1) - self.get_noise_val(x,ypos,z,0) + self.get_noise_val(x,yneg,z,0) 
         
         #offset.x  = nypos - nyneg - nzpos + nzneg        
         #offset.y  = nzpos - nzneg - nxpos + nxneg
