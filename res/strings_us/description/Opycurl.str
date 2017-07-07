@@ -1,11 +1,9 @@
 STRINGTABLE Opycurl
 {
 		Opycurl  		"Py Curl";
-		SPEED			"Speed";
+		SPEED			"Noise Animation Speed";
 		FREQUENCY		"Frequency";
-		NOISE_OFFSET	"Noise Offset";
-		POS_OFFSET		"Position Offset";
 		NOISESCALE		"Noise Scale";
-		DISP			"Displacement";
+		DISP			"Amplitude";
 
 }

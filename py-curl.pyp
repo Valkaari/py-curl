@@ -34,19 +34,15 @@ class CurlSmoke(plugins.ObjectData):
 
 
 
-        self.speed = 1.0
+        self.speed = op[c4d.SPEED] = 1.0
         
-        self.noise_offsets = c4d.Vector(145.392,141.791,456.167)
+        self.noise_offsets = c4d.Vector(0,150,600)
         self.offset = c4d.Vector(0)
-        self.noiseScale = 1.0
-        self.disp = 1.0
+        self.noiseScale = op[c4d.NOISESCALE] =  5.0
+        self.disp = op[c4d.DISP]= 20.0
 
-        op.SetParameter(c4d.SPEED, self.speed,c4d.DESCFLAGS_SET_0)
         
-        op.SetParameter(c4d.NOISE_OFFSET, self.noise_offsets , c4d.DESCFLAGS_SET_0 )
-        op.SetParameter(c4d.POS_OFFSET, self.offset , c4d.DESCFLAGS_SET_0 )
-        op.SetParameter(c4d.NOISESCALE, self.noiseScale , c4d.DESCFLAGS_SET_0 )
-        op.SetParameter(c4d.DISP, self.disp , c4d.DESCFLAGS_SET_0 )
+
 
        
 
@@ -69,7 +65,7 @@ class CurlSmoke(plugins.ObjectData):
         disp = self.disp
 
         offset = c4d.Vector(0)
-        delta = 0.5/(disp)
+        #delta = 0.5/(disp)
         #delta = 500.0
         x = pos.x
         y = pos.y
@@ -81,34 +77,36 @@ class CurlSmoke(plugins.ObjectData):
         zpos = z + disp
         zneg = z - disp
         
-        nxpos = self.get_noise_val(xpos,y,z,1)
-        nxneg = self.get_noise_val(xneg,y,z,1)
-        nypos = self.get_noise_val(x,ypos,z,2)
-        nyneg = self.get_noise_val(x,yneg,z,2)
-        nzpos = self.get_noise_val(x,y,zpos,1)
-        nzneg = self.get_noise_val(x,y,zneg,1)
+        #nxpos = self.get_noise_val(xpos,y,z,0)
+        #nxneg = self.get_noise_val(xneg,y,z,0)
+        #nypos = self.get_noise_val(x,ypos,z,1)
+        #nyneg = self.get_noise_val(x,yneg,z,1)
+        #nzpos = self.get_noise_val(x,y,zpos,2)
+        #nzneg = self.get_noise_val(x,y,zneg,2)
               
+        offset.x = ((self.get_noise_val(x,ypos,z,2) - self.get_noise_val(x,yneg,z,2)) - (self.get_noise_val(x,y,zpos,1) - self.get_noise_val(x,y,zneg,1))) 
+        offset.y = ((self.get_noise_val(x,y,zpos,0) - self.get_noise_val(x,y,zneg,0)) - (self.get_noise_val(xpos,y,z,2) - self.get_noise_val(xneg,y,z,2))) 
+        offset.z = ((self.get_noise_val(xpos,y,z,1) - self.get_noise_val(xneg,y,z,1)) - (self.get_noise_val(x,ypos,z,0) - self.get_noise_val(x,yneg,z,0))) 
         
-        #offset.x = ((self.get_noise_val(x,ypos,z,2) - self.get_noise_val(x,yneg,z,2)) - (self.get_noise_val(x,y,zpos,1) - self.get_noise_val(x,y,zneg,1))) 
-        #offset.y = ((self.get_noise_val(x,y,zpos,0) - self.get_noise_val(x,y,zneg,0)) - (self.get_noise_val(xpos,y,z,2) - self.get_noise_val(xneg,y,z,2))) 
-        #offset.z = ((self.get_noise_val(xpos,y,z,1) - self.get_noise_val(xneg,y,z,1)) - (self.get_noise_val(x,ypos,z,0) - self.get_noise_val(x,yneg,z,0))) 
-        offset.x  = nypos - nyneg - nzpos + nzneg        
-        offset.y  = nzpos - nzneg - nxpos + nxneg
-        offset.z  = nxpos - nxneg - nypos + nyneg
+        #offset.x  = nypos - nyneg - nzpos + nzneg        
+        #offset.y  = nzpos - nzneg - nxpos + nxneg
+        #offset.z  = nxpos - nxneg - nypos + nyneg
 
 
         #offset *= delta
         offset.Normalize()
-        return offset / 2.0*disp * amplitude
+        return offset / 2.0*disp 
     
     def ModifyParticles(self, op, pp, ss, pcnt, diff):
         self.doc = op.GetDocument()
         self.speed = op.GetParameter(c4d.SPEED, c4d.DESCFLAGS_GET_0)
-        self.noiseoffsets = op.GetParameter(c4d.NOISE_OFFSET, c4d.DESCFLAGS_GET_0)
-        self.posOffset  = op.GetParameter(c4d.POS_OFFSET, c4d.DESCFLAGS_GET_0)
+        #self.noiseoffsets = op.GetParameter(c4d.CURL_NOISE_OFFSET, c4d.DESCFLAGS_GET_0)
+        #self.posOffset  = op.GetParameter(c4d.POS_OFFSET, c4d.DESCFLAGS_GET_0)
         self.noiseScale = op.GetParameter(c4d.NOISESCALE, c4d.DESCFLAGS_GET_0) 
         self.disp = op.GetParameter(c4d.DISP, c4d.DESCFLAGS_GET_0) 
         
+
+
         for i in xrange(pcnt):
             if ( not (pp[i].bits & c4d.PARTICLEFLAGS_VISIBLE)):
                 continue
